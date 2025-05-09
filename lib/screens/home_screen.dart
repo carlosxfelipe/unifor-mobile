@@ -30,6 +30,7 @@ class HomeBody extends StatelessWidget {
           child: GreetingHeader(),
         ),
         RecentMessagesSection(),
+        TodayClassesSection(),
       ],
     );
   }
