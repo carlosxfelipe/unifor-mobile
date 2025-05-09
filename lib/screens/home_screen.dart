@@ -22,14 +22,14 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: const [
         Divider(height: 1, thickness: 1, color: Colors.black12),
         Padding(
           padding: EdgeInsets.only(left: 16, top: 16),
           child: GreetingHeader(),
         ),
+        RecentMessagesSection(),
       ],
     );
   }
