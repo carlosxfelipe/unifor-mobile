@@ -15,30 +15,42 @@ class TodayClassesSection extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          _buildClassCard(
+          buildClassCard(
             title: 'Desenv plataformas móveis',
             room: 'K11',
             time: 'N5AB',
             code: 'T197 - 27',
+            frequency: 0.95,
+            absences: 4,
           ),
           const SizedBox(height: 12),
-          _buildClassCard(
+          buildClassCard(
             title: 'Ger de serviços no ciberespaço',
             room: 'K05',
             time: 'N5CD',
             code: 'T337 - 85',
+            frequency: 0.78,
+            absences: 9,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildClassCard({
+  Widget buildClassCard({
     required String title,
     required String room,
     required String time,
     required String code,
+    required double frequency,
+    required int absences,
   }) {
+    Color getFrequencyColor(double freq) {
+      if (freq >= 0.9) return Colors.green;
+      if (freq >= 0.75) return Colors.orange;
+      return Colors.red;
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -73,6 +85,33 @@ class TodayClassesSection extends StatelessWidget {
               const Spacer(),
               Text(code, style: const TextStyle(color: Colors.grey)),
             ],
+          ),
+          const SizedBox(height: 12),
+          const Divider(height: 1, thickness: 1, color: Colors.black12),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Frequência',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text('${(frequency * 100).toStringAsFixed(0)}%'),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text('$absences faltas', style: const TextStyle(color: Colors.grey)),
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: LinearProgressIndicator(
+              value: frequency,
+              minHeight: 8,
+              backgroundColor: Colors.grey[200],
+              valueColor: AlwaysStoppedAnimation<Color>(
+                getFrequencyColor(frequency),
+              ),
+            ),
           ),
         ],
       ),

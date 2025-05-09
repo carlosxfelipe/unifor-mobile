@@ -50,7 +50,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withAlpha(25),
                   blurRadius: 4,
                   offset: Offset(0, -1),
                 ),

@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
     return CustomBottomNavigationBar(
       currentIndex: 0, // Índice correspondente ao botão "Início"
       child: Scaffold(
-        backgroundColor: const Color(0xFFE4F2FD),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: CustomAppBar(),
         body: HomeBody(),
       ),
@@ -31,6 +31,7 @@ class HomeBody extends StatelessWidget {
         ),
         RecentMessagesSection(),
         TodayClassesSection(),
+        MoodCheckSection(),
         LatestNoticesSection(),
       ],
     );

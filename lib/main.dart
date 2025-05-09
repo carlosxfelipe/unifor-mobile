@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:unifor_mobile/theme/theme.dart';
+import 'package:unifor_mobile/theme/theme_provider.dart';
 import 'package:unifor_mobile/routes/router.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -12,10 +19,15 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      themeMode: ThemeMode.light,
+      theme: AppTheme.lightTheme.copyWith(
+        scaffoldBackgroundColor: themeProvider.scaffoldColor,
+      ),
+      // darkTheme: ThemeData.dark(),
+      themeMode: themeProvider.themeMode,
       routerConfig: router,
       builder: (context, child) {
         final systemUiStyle = SystemUiOverlayStyle(
@@ -26,7 +38,6 @@ class MainApp extends StatelessWidget {
         );
 
         SystemChrome.setSystemUIOverlayStyle(systemUiStyle);
-
         return child!;
       },
     );

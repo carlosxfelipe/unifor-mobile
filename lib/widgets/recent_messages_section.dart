@@ -7,6 +7,11 @@ class RecentMessagesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> people = [
       {
+        'name': 'Alan\nBandeira',
+        'image':
+            'https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
+      },
+      {
         'name': 'Thiago\nNarak',
         'image':
             'https://media.licdn.com/dms/image/v2/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
