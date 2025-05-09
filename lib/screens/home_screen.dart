@@ -35,7 +35,7 @@ class GreetingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 100,
       width: double.infinity,
       margin: const EdgeInsets.only(right: 16),
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -43,6 +43,7 @@ class GreetingHeader extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         gradient: const LinearGradient(
           colors: [Color(0xFF2196F3), Color(0xFF0D47A1)],
+          stops: [1.0, 0.0],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -50,10 +51,17 @@ class GreetingHeader extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const CircleAvatar(
-            radius: 32,
-            backgroundImage: NetworkImage(
-              'https://avatars.githubusercontent.com/u/85801709?v=4',
+          Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: const CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(
+                'https://avatars.githubusercontent.com/u/85801709?v=4',
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -72,7 +80,7 @@ class GreetingHeader extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 '2223794',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ],
           ),
