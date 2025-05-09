@@ -31,6 +31,7 @@ class HomeBody extends StatelessWidget {
         ),
         RecentMessagesSection(),
         TodayClassesSection(),
+        LatestNoticesSection(),
       ],
     );
   }
