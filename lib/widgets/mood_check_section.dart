@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MoodCheckSection extends StatefulWidget {
   const MoodCheckSection({super.key});
@@ -44,7 +45,7 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
   Widget _buildCardForStage(String? stage) {
     return Container(
       key: ValueKey(stage),
-      height: 180,
+      constraints: const BoxConstraints(minHeight: 180),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -63,12 +64,65 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
             ),
           );
         } else if (stage == 'pap') {
-          return const Center(
-            child: Text(
-              'Conheça o Programa de Apoio Psicopedagógico (PAP) da Unifor.\n\nAtendimentos remotos podem ser agendados pelos contatos:\n(85) 3477.3399 • (85) 99250.7530 (WhatsApp)\npap@unifor.br',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, height: 1.4),
-            ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Precisa de apoio? 💙',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const Text(
+                'O Programa de Apoio Psicopedagógico (PAP) da Unifor oferece atendimentos remotos. Agende pelo telefone, WhatsApp ou e-mail:',
+                style: TextStyle(fontSize: 14, height: 1.3),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade50,
+                    ),
+                    icon: const Icon(Icons.phone, color: Colors.blue),
+                    label: const Text(
+                      '(85) 3477.3399',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    onPressed: () {
+                      launchUrl(Uri.parse('tel:+558534773399'));
+                    },
+                  ),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade50,
+                    ),
+                    icon: const Icon(Icons.phone, color: Colors.green),
+                    label: const Text(
+                      '(85) 99250.7530',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                    onPressed: () {
+                      launchUrl(Uri.parse('https://wa.me/5585992507530'));
+                    },
+                  ),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple.shade50,
+                    ),
+                    icon: const Icon(Icons.email, color: Colors.deepPurple),
+                    label: const Text(
+                      'pap@unifor.br',
+                      style: TextStyle(color: Colors.deepPurple),
+                    ),
+                    onPressed: () {
+                      launchUrl(Uri.parse('mailto:pap@unifor.br'));
+                    },
+                  ),
+                ],
+              ),
+            ],
           );
         } else {
           return Column(
