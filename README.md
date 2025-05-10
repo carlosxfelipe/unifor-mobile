@@ -11,6 +11,9 @@ Criei um mock da tela inicial do app Unifor Mobile em Flutter, adicionando funci
   </table>
 </p>
 
+**Acesse a versão web:**  
+[unifor-mobile.netlify.app](https://unifor-mobile.netlify.app/)
+
 ## Como rodar este projeto
 
 1. **Clone o repositório:**

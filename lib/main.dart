@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:unifor_mobile/theme/theme.dart';
 import 'package:unifor_mobile/theme/theme_provider.dart';
 import 'package:unifor_mobile/routes/router.dart';
+import 'package:flutter/foundation.dart';
 
 void main() {
   runApp(
@@ -38,6 +39,20 @@ class MainApp extends StatelessWidget {
         );
 
         SystemChrome.setSystemUIOverlayStyle(systemUiStyle);
+
+        // Limitar largura só no web
+        if (kIsWeb) {
+          return Container(
+            color: themeProvider.scaffoldColor,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: child!,
+              ),
+            ),
+          );
+        }
+
         return child!;
       },
     );
