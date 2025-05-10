@@ -3,7 +3,7 @@
 Criei um mock da tela inicial do app Unifor Mobile em Flutter, adicionando funcionalidades como suporte a temas e um card de bem-estar digital, entre outras melhorias.
 
 <p align="center">
-  <img src="./screenshots/678shots_so.png" alt="Telas de login" />
+  <img src="./screenshots/460shots_so.png" alt="Telas de login" />
 </p>
 
 <p align="center">
