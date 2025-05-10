@@ -11,10 +11,12 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
   bool _hasSelected = false;
   bool _isVisible = true;
   bool _shouldShow = true;
+  String _responseText = '';
 
-  void _onMoodSelected() {
+  void _onMoodSelected(String response) {
     setState(() {
       _hasSelected = true;
+      _responseText = response;
     });
 
     Future.delayed(const Duration(seconds: 2), () {
@@ -58,11 +60,12 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
             duration: const Duration(milliseconds: 300),
             child:
                 _hasSelected
-                    ? const Center(
-                      key: ValueKey('thank_you'),
+                    ? Center(
+                      key: const ValueKey('response'),
                       child: Text(
-                        'Obrigado!',
-                        style: TextStyle(
+                        _responseText,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -87,31 +90,46 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
                               icon: Icons.sentiment_very_satisfied,
                               label: 'radical',
                               color: Colors.teal,
-                              onTap: _onMoodSelected,
+                              onTap:
+                                  () => _onMoodSelected(
+                                    'Uau! Que energia boa! 😄',
+                                  ),
                             ),
                             _MoodOption(
                               icon: Icons.sentiment_satisfied,
                               label: 'bem',
                               color: Colors.lightGreen,
-                              onTap: _onMoodSelected,
+                              onTap:
+                                  () => _onMoodSelected(
+                                    'Que ótimo saber que você está bem 😊',
+                                  ),
                             ),
                             _MoodOption(
                               icon: Icons.sentiment_neutral,
                               label: 'indiferente',
                               color: Colors.lightBlue,
-                              onTap: _onMoodSelected,
+                              onTap:
+                                  () => _onMoodSelected(
+                                    'Tudo bem ficar neutro às vezes! 😉',
+                                  ),
                             ),
                             _MoodOption(
                               icon: Icons.sentiment_dissatisfied,
                               label: 'mal',
                               color: Colors.orange,
-                              onTap: _onMoodSelected,
+                              onTap:
+                                  () => _onMoodSelected(
+                                    'Sinto muito, espero que melhore logo! 💛',
+                                  ),
                             ),
                             _MoodOption(
                               icon: Icons.sentiment_very_dissatisfied,
                               label: 'horrível',
                               color: Colors.pinkAccent,
-                              onTap: _onMoodSelected,
+                              onTap:
+                                  () => _onMoodSelected(
+                                    'Se precisar, estamos aqui por você 💖',
+                                  ),
                             ),
                           ],
                         ),
