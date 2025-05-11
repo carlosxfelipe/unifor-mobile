@@ -26,7 +26,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         context.go('/');
         break;
       case 1:
-        // context.go('/messages');
+        context.go('/messages');
         break;
       case 2:
         // context.go('/subjects');

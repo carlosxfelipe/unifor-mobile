@@ -19,5 +19,10 @@ final GoRouter router = GoRouter(
       pageBuilder:
           (context, state) => NoTransitionPage(child: const HomeScreen()),
     ),
+    GoRoute(
+      path: '/messages',
+      pageBuilder:
+          (context, state) => NoTransitionPage(child: const MessagesScreen()),
+    ),
   ],
 );
