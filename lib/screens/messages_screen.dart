@@ -6,12 +6,14 @@ class MessagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<String> searchNotifier = ValueNotifier('');
+
     return CustomBottomNavigationBar(
-      currentIndex: 1, // Índice correspondente ao botão "Torpedo"
+      currentIndex: 1,
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: const SearchAppBar(),
-        body: const MessagesBody(),
+        appBar: SearchAppBar(searchNotifier: searchNotifier),
+        body: MessagesBody(searchNotifier: searchNotifier),
       ),
     );
   }
@@ -32,7 +34,9 @@ class MessagesScreen extends StatelessWidget {
 // }
 
 class MessagesBody extends StatelessWidget {
-  const MessagesBody({super.key});
+  final ValueNotifier<String> searchNotifier;
+
+  const MessagesBody({super.key, required this.searchNotifier});
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +46,14 @@ class MessagesBody extends StatelessWidget {
         'message': 'Ei! Vamos conversar depois?',
         'time': '12:30',
         'image':
-            'https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
+            'https://media.licdn.com/dms/image/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/0/1558734738354?e=2147483647&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
       },
       {
         'name': 'Thiago Narak',
         'message': 'A impressora 3D terminou a peça! Depois te mostro.',
         'time': '11:45',
         'image':
-            'https://media.licdn.com/dms/image/v2/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
+            'https://media.licdn.com/dms/image/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
       },
       {
         'name': 'Grupo Unifor',
@@ -68,71 +72,82 @@ class MessagesBody extends StatelessWidget {
         'message': 'Vai ter um evento de tecnologia sábado na Unifor. Bora?',
         'time': 'Ontem',
         'image':
-            'https://media.licdn.com/dms/image/v2/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ',
+            'https://media.licdn.com/dms/image/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ',
       },
     ];
 
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: chats.length,
-      itemBuilder: (context, index) {
-        final chat = chats[index];
-        final imageUrl = chat['image'];
+    return ValueListenableBuilder<String>(
+      valueListenable: searchNotifier,
+      builder: (context, query, _) {
+        final filtered =
+            chats.where((chat) {
+              final name = chat['name']!.toLowerCase();
+              return name.contains(query.toLowerCase());
+            }).toList();
 
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 4,
-                offset: Offset(0, 2),
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: filtered.length,
+          itemBuilder: (context, index) {
+            final chat = filtered[index];
+            final imageUrl = chat['image'];
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 28,
-                backgroundImage:
-                    (imageUrl != null && imageUrl.isNotEmpty)
-                        ? NetworkImage(imageUrl)
-                        : null,
-                backgroundColor: Colors.grey[300],
-                child:
-                    (imageUrl == null || imageUrl.isEmpty)
-                        ? const Icon(Icons.person, color: Colors.white)
-                        : null,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      chat['name']!,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 28,
+                    backgroundImage:
+                        (imageUrl != null && imageUrl.isNotEmpty)
+                            ? NetworkImage(imageUrl)
+                            : null,
+                    backgroundColor: Colors.grey[300],
+                    child:
+                        (imageUrl == null || imageUrl.isEmpty)
+                            ? const Icon(Icons.person, color: Colors.white)
+                            : null,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          chat['name']!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          chat['message']!,
+                          style: const TextStyle(color: Colors.black87),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      chat['message']!,
-                      style: const TextStyle(color: Colors.black87),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    chat['time']!,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              Text(
-                chat['time']!,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

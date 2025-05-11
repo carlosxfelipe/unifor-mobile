@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const SearchAppBar({super.key});
+  final ValueNotifier<String> searchNotifier;
+
+  const SearchAppBar({super.key, required this.searchNotifier});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -12,6 +14,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       title: TextField(
+        onChanged: (value) => searchNotifier.value = value,
         style: const TextStyle(fontSize: 14),
         decoration: InputDecoration(
           filled: true,
