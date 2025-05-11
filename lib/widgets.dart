@@ -7,3 +7,4 @@ export 'package:unifor_mobile/widgets/latest_notices_section.dart';
 
 export 'package:unifor_mobile/widgets/mood_check_section.dart';
 export 'package:unifor_mobile/widgets/menu_modal.dart';
+export 'package:unifor_mobile/widgets/search_app_bar.dart';

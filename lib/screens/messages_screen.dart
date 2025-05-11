@@ -10,7 +10,7 @@ class MessagesScreen extends StatelessWidget {
       currentIndex: 1, // Índice correspondente ao botão "Torpedo"
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // appBar: CustomAppBar(title: 'Mensagens'),
+        appBar: const SearchAppBar(),
         body: const MessagesBody(),
       ),
     );
