@@ -111,6 +111,15 @@ class MessagesBody extends StatelessWidget {
               return name.contains(query.toLowerCase());
             }).toList();
 
+        if (filtered.isEmpty) {
+          return const Center(
+            child: Text(
+              'Nenhuma conversa encontrada.',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          );
+        }
+
         return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: filtered.length,
@@ -136,15 +145,37 @@ class MessagesBody extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 28,
-                    backgroundImage:
-                        (imageUrl != null && imageUrl.isNotEmpty)
-                            ? NetworkImage(imageUrl)
-                            : null,
-                    backgroundColor: Colors.grey[300],
+                    backgroundColor: Colors.blueAccent,
                     child:
-                        (imageUrl == null || imageUrl.isEmpty)
-                            ? const Icon(Icons.person, color: Colors.white)
-                            : null,
+                        (imageUrl != null && imageUrl.isNotEmpty)
+                            ? ClipOval(
+                              child: Image.network(
+                                imageUrl,
+                                width: 56,
+                                height: 56,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Center(
+                                    child: Text(
+                                      chat['name']![0],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                            : Text(
+                              chat['name']![0],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
