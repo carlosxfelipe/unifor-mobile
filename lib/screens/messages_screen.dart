@@ -1,19 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:unifor_mobile/widgets.dart';
+import 'dart:async';
 
-class MessagesScreen extends StatelessWidget {
+class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final ValueNotifier<String> searchNotifier = ValueNotifier('');
+  State<MessagesScreen> createState() => _MessagesScreenState();
+}
 
+class _MessagesScreenState extends State<MessagesScreen> {
+  final TextEditingController _controller = TextEditingController();
+  final ValueNotifier<String> _searchNotifier = ValueNotifier('');
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
+      _debounce = Timer(const Duration(milliseconds: 400), () {
+        _searchNotifier.value = _controller.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return CustomBottomNavigationBar(
       currentIndex: 1,
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: SearchAppBar(searchNotifier: searchNotifier),
-        body: MessagesBody(searchNotifier: searchNotifier),
+        appBar: SearchAppBar(controller: _controller),
+        body: MessagesBody(searchNotifier: _searchNotifier),
       ),
     );
   }
