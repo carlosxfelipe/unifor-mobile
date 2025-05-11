@@ -22,6 +22,14 @@ class MenuModal extends StatelessWidget {
     }
   }
 
+  Widget get _divider => const Divider(
+    height: 1,
+    thickness: 0.6,
+    color: Color(0xFFE0E0E0),
+    indent: 16,
+    endIndent: 16,
+  );
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,31 +42,39 @@ class MenuModal extends StatelessWidget {
               title: const Text('Perfil'),
               onTap: _openLinkedIn,
             ),
+            _divider,
             const ListTile(
               leading: Icon(Icons.playlist_add),
               title: Text('Matrícula'),
             ),
+            _divider,
             const ListTile(
               leading: Icon(Icons.location_on_outlined),
               title: Text('Mapa do campus'),
             ),
+            _divider,
             const ListTile(
               leading: Icon(Icons.computer),
               title: Text('Laboratórios'),
             ),
+            _divider,
             const ListTile(
               leading: Icon(Icons.book_outlined),
               title: Text('Biblioteca'),
             ),
+            _divider,
             const ListTile(
               leading: Icon(Icons.calendar_today),
               title: Text('Calendário letivo'),
             ),
+            _divider,
             const ListTile(leading: Icon(Icons.groups), title: Text('Grupos')),
+            _divider,
             const ListTile(
               leading: Icon(Icons.help_outline),
               title: Text('Perguntas frequentes'),
             ),
+            _divider,
             ListTile(
               leading: const Icon(Icons.code),
               title: const Text('GitHub'),
