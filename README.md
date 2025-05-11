@@ -17,7 +17,7 @@ Criei um mock da tela inicial do app Unifor Mobile em Flutter, adicionando funci
 Visualização no Safari (macOS)
 
 <p align="center">
-  <img src="./screenshots/583shots_so.png" alt="Preview do Projeto" />
+  <img src="./screenshots/234shots_so.png" alt="Preview do Projeto" />
 </p>
 
 Visualização no Chrome (Android)
