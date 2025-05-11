@@ -40,19 +40,6 @@ class MainApp extends StatelessWidget {
 
         SystemChrome.setSystemUIOverlayStyle(systemUiStyle);
 
-        // Limitar largura só no web
-        if (kIsWeb) {
-          return Container(
-            color: themeProvider.scaffoldColor,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: child!,
-              ),
-            ),
-          );
-        }
-
         return child!;
       },
     );

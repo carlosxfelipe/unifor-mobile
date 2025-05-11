@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unifor_mobile/widgets.dart';
+import 'package:flutter/foundation.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -22,7 +23,7 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    Widget content = ListView(
       children: const [
         Divider(height: 1, thickness: 1, color: Colors.black12),
         Padding(
@@ -35,5 +36,17 @@ class HomeBody extends StatelessWidget {
         LatestNoticesSection(),
       ],
     );
+
+    // Limita a largura apenas na web
+    if (kIsWeb) {
+      content = Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 768),
+          child: content,
+        ),
+      );
+    }
+
+    return content;
   }
 }

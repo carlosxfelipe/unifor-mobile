@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unifor_mobile/widgets.dart';
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -102,7 +103,7 @@ class MessagesBody extends StatelessWidget {
       },
     ];
 
-    return ValueListenableBuilder<String>(
+    Widget content = ValueListenableBuilder<String>(
       valueListenable: searchNotifier,
       builder: (context, query, _) {
         final filtered =
@@ -208,5 +209,17 @@ class MessagesBody extends StatelessWidget {
         );
       },
     );
+
+    // Limita largura apenas na web
+    if (kIsWeb) {
+      content = Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 768),
+          child: content,
+        ),
+      );
+    }
+
+    return content;
   }
 }
