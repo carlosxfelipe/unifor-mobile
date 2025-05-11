@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:unifor_mobile/theme/theme.dart';
 import 'package:unifor_mobile/theme/theme_provider.dart';
 import 'package:unifor_mobile/routes/router.dart';
-import 'package:flutter/foundation.dart';
 
 void main() {
   runApp(
