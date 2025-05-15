@@ -29,7 +29,7 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
     super.dispose();
   }
 
-  void _onMoodSelected(String label, String response) {
+  void _onMoodSelected(String label, String response) async {
     setState(() {
       _stage = 'response';
       _responseText = response;
@@ -39,13 +39,14 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
       _confettiController.play();
     }
 
-    Future.delayed(const Duration(seconds: 2), () {
-      if (label == 'horrível') {
-        setState(() => _stage = 'pap');
-      } else {
-        setState(() => _stage = 'hidden');
-      }
-    });
+    // Espera exatamente o tempo do confetti antes de mudar o card
+    await Future.delayed(_confettiController.duration);
+
+    if (label == 'horrível') {
+      setState(() => _stage = 'pap');
+    } else {
+      setState(() => _stage = 'hidden');
+    }
   }
 
   @override
