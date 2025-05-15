@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:confetti/confetti.dart';
 
 class MoodCheckSection extends StatefulWidget {
   const MoodCheckSection({super.key});
@@ -12,11 +13,31 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
   String? _stage; // null, 'response', 'pap', 'hidden'
   String _responseText = '';
 
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
   void _onMoodSelected(String label, String response) {
     setState(() {
       _stage = 'response';
       _responseText = response;
     });
+
+    if (label == 'radical') {
+      _confettiController.play();
+    }
 
     Future.delayed(const Duration(seconds: 2), () {
       if (label == 'horrível') {
@@ -33,11 +54,31 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
-        switchInCurve: Curves.easeInOut,
-        switchOutCurve: Curves.easeInOut,
-        child: _buildCardForStage(_stage),
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            switchInCurve: Curves.easeInOut,
+            switchOutCurve: Curves.easeInOut,
+            child: _buildCardForStage(_stage),
+          ),
+          ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            colors: const [
+              Colors.green,
+              Colors.blue,
+              Colors.pink,
+              Colors.orange,
+              Colors.purple,
+            ],
+            emissionFrequency: 0.05,
+            numberOfParticles: 20,
+            gravity: 0.2,
+          ),
+        ],
       ),
     );
   }
