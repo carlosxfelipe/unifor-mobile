@@ -32,7 +32,8 @@ class HomeBody extends StatelessWidget {
         ),
         RecentMessagesSection(),
         TodayClassesSection(),
-        MoodCheckSection(),
+        // MoodCheckSection(),
+        MoodCheckSectionApi(),
         LatestNoticesSection(),
       ],
     );
