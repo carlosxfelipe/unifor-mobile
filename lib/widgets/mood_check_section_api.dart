@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:confetti/confetti.dart';
+import 'package:http/http.dart' as http;
 
 class MoodCheckSectionApi extends StatefulWidget {
   const MoodCheckSectionApi({super.key});
@@ -14,6 +16,26 @@ class _MoodCheckSectionApiState extends State<MoodCheckSectionApi> {
   String _responseText = '';
 
   late ConfettiController _confettiController;
+
+  Future<void> _sendMoodToApi(String moodLabel) async {
+    final url = Uri.parse('https://academia-unifor-fastapi.onrender.com/mood/');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'mood': moodLabel}),
+      );
+
+      if (response.statusCode != 200) {
+        debugPrint('❌ Erro ao registrar humor: ${response.body}');
+      } else {
+        debugPrint('✅ Humor registrado: $moodLabel');
+      }
+    } catch (e) {
+      debugPrint('⚠️ Falha ao enviar humor: $e');
+    }
+  }
 
   @override
   void initState() {
@@ -30,6 +52,8 @@ class _MoodCheckSectionApiState extends State<MoodCheckSectionApi> {
   }
 
   void _onMoodSelected(String label, String response) async {
+    await _sendMoodToApi(label);
+
     setState(() {
       _stage = 'response';
       _responseText = response;
