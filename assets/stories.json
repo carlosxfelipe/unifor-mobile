@@ -1,0 +1,34 @@
+[
+  {
+    "user": "Alan Bandeira",
+    "userId": 1035489,
+    "title": "📚 Oficina de SQL",
+    "description": "Aprenda a dominar o básico de bancos relacionais\ncom SQL e pratique com exercícios ao vivo!",
+    "colors": ["#0061FF", "#60EFFF"],
+    "duration": 5
+  },
+  {
+    "user": "Thiago Narak",
+    "userId": 2849157,
+    "title": "🚀 Hackathon chegando!",
+    "description": "Inscreva-se até sexta para participar com sua equipe.",
+    "colors": ["#00C9FF", "#92FE9D"],
+    "duration": 6
+  },
+  {
+    "user": "Maria Jousy",
+    "userId": 7753421,
+    "title": "🚨 Atenção, pessoal! (T339/20)",
+    "description": "O agendamento da AV3 já começou! Não percam tempo! É só entrar no AVA e fazer o agendamento. Qualquer dúvida, estou à disposição!",
+    "colors": ["#FF5F6D", "#FFC371"],
+    "duration": 6
+  },
+  {
+    "user": "Rafaela Ponte",
+    "userId": 6621984,
+    "title": "👨‍💻 OPORTUNIDADE! *TRAINEE*",
+    "description": "O INSTITUTO DO CÂNCER DO CEARÁ (ICC) abriu vagas de Trainee em de ADS, Inteligência Artificial, Ciência da Computação, Engenharias, Administração, Contábeis, Econômicas e Enfermagem. Acesse https://unifor-csm.symplicity.com/ com o código: 254974.  Info: 991822130.",
+    "colors": ["#FFC1CC", "#FF3E4D"],
+    "duration": 10
+  }
+]

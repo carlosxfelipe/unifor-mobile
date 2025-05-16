@@ -30,10 +30,10 @@ class HomeBody extends StatelessWidget {
           padding: EdgeInsets.only(left: 16, top: 16),
           child: GreetingHeader(),
         ),
-        RecentMessagesSection(),
+        // RecentMessagesSection(),
+        StoryCircleList(),
         TodayClassesSection(),
-        // MoodCheckSection(),
-        MoodCheckSectionApi(),
+        MoodCheckSection(),
         LatestNoticesSection(),
       ],
     );
