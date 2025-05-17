@@ -105,9 +105,18 @@ class _MessagesBodyState extends State<MessagesBody> {
     // Mostra snackbar com opção de desfazer
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Conversa com ${removed['name']} apagada'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        content: Text(
+          'Conversa com ${removed['name']} apagada',
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         action: SnackBarAction(
           label: 'Desfazer',
+          textColor: Colors.white,
+
           onPressed: () {
             setState(() {
               _conversations.insert(index, removed);
