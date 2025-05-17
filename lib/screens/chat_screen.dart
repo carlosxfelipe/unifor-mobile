@@ -189,7 +189,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         final bgColor =
                             msg['isMe'] == true
                                 ? Theme.of(context).scaffoldBackgroundColor
-                                : Colors.grey[300];
+                                : (_isLocalDark
+                                    ? Colors.white
+                                    : Colors.grey[100]);
                         final textColor =
                             msg['isMe'] == true ? myTextColor : Colors.black87;
 
@@ -216,6 +218,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   style: TextStyle(
                                     color: textColor,
                                     fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -241,7 +244,7 @@ class _ChatScreenState extends State<ChatScreen> {
               color: background,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black12,
+                  color: _isLocalDark ? Colors.white24 : Colors.black12,
                   blurRadius: 0,
                   spreadRadius: 0,
                   offset: Offset(0, -1),
