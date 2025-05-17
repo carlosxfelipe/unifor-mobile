@@ -73,14 +73,14 @@ class MessagesBody extends StatelessWidget {
         'message': 'Ei! Vamos conversar depois?',
         'time': '12:30',
         'image':
-            'https://media.licdn.com/dms/image/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/0/1558734738354?e=2147483647&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
+            'https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
       },
       {
         'name': 'Thiago Narak',
         'message': 'A impressora 3D terminou a peça! Depois te mostro.',
         'time': '11:45',
         'image':
-            'https://media.licdn.com/dms/image/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
+            'https://media.licdn.com/dms/image/v2/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
       },
       {
         'name': 'Grupo Unifor',
@@ -99,7 +99,7 @@ class MessagesBody extends StatelessWidget {
         'message': 'Vai ter um evento de tecnologia sábado na Unifor. Bora?',
         'time': 'Ontem',
         'image':
-            'https://media.licdn.com/dms/image/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ',
+            'https://media.licdn.com/dms/image/v2/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ',
       },
     ];
 
