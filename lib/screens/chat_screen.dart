@@ -2,6 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:provider/provider.dart';
+import 'package:unifor_mobile/theme/theme_provider.dart';
+
+bool isColorDark(Color color) {
+  final brightness = color.computeLuminance();
+  return brightness < 0.5;
+}
 
 class ChatScreen extends StatefulWidget {
   final String name;
@@ -53,8 +60,27 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.clear();
   }
 
+  PopupMenuItem<Color> _buildColorOption(String name, Color color) {
+    return PopupMenuItem(
+      value: color,
+      child: Row(
+        children: [
+          CircleAvatar(backgroundColor: color, radius: 10),
+          const SizedBox(width: 8),
+          Text(name),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final scaffoldColor = Theme.of(context).scaffoldBackgroundColor;
+    final isDark = isColorDark(scaffoldColor);
+    final myMessageColor = scaffoldColor;
+    final myTextColor = isDark ? Colors.white : Colors.black87;
+    final myTimeColor = isDark ? Colors.white70 : Colors.black54;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -94,6 +120,29 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
+        actions: [
+          PopupMenuButton<Color>(
+            icon: const Icon(Icons.palette, color: Colors.black87),
+            onSelected: (color) {
+              Provider.of<ThemeProvider>(
+                context,
+                listen: false,
+              ).setScaffoldColor(color);
+            },
+            itemBuilder:
+                (context) => [
+                  _buildColorOption("Azul claro", const Color(0xFFE4F2FD)),
+                  _buildColorOption("Branco", Colors.white),
+                  _buildColorOption("Amarelo claro", const Color(0xFFFEEFC3)),
+                  _buildColorOption("Laranja claro", const Color(0xFFFFF3E0)),
+                  _buildColorOption("Vermelho claro", const Color(0xFFFFEBEE)),
+                  _buildColorOption("Ciano claro", const Color(0xFFE0F7FA)),
+                  _buildColorOption("Roxo claro", const Color(0xFFF3E5F5)),
+                  _buildColorOption("Verde claro", const Color(0xFFE8F5E9)),
+                  _buildColorOption("Cinza claro", const Color(0xFFF5F5F5)),
+                ],
+          ),
+        ],
         iconTheme: const IconThemeData(color: Colors.black87),
       ),
       backgroundColor: Colors.white,
@@ -119,10 +168,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                 : Alignment.centerLeft;
                         final bgColor =
                             msg['isMe'] == true
-                                ? const Color(0xFF007AFF)
+                                ? Theme.of(context).scaffoldBackgroundColor
                                 : Colors.grey[300];
                         final textColor =
-                            msg['isMe'] == true ? Colors.white : Colors.black87;
+                            msg['isMe'] == true ? myTextColor : Colors.black87;
 
                         return Align(
                           alignment: alignment,
@@ -156,7 +205,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     fontSize: 11,
                                     color:
                                         msg['isMe'] == true
-                                            ? Colors.white70
+                                            ? myTimeColor
                                             : Colors.black54,
                                   ),
                                 ),
@@ -213,14 +262,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Container(
                         width: 42,
                         height: 42,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFF007AFF),
+                          color: Theme.of(context).scaffoldBackgroundColor,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.send,
                           size: 20,
-                          color: Colors.white,
+                          color: isDark ? Colors.white : Colors.black87,
                         ),
                       ),
                     ),
