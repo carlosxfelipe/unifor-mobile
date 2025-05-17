@@ -63,63 +63,121 @@ class _MessagesScreenState extends State<MessagesScreen> {
 //   }
 // }
 
-class MessagesBody extends StatelessWidget {
+class MessagesBody extends StatefulWidget {
   final ValueNotifier<String> searchNotifier;
 
   const MessagesBody({super.key, required this.searchNotifier});
 
-  Future<List<Map<String, dynamic>>> _loadConversations() async {
+  @override
+  State<MessagesBody> createState() => _MessagesBodyState();
+}
+
+class _MessagesBodyState extends State<MessagesBody> {
+  List<Map<String, dynamic>> _conversations = [];
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConversations();
+  }
+
+  Future<void> _loadConversations() async {
     final String jsonStr = await rootBundle.loadString(
       'assets/mock_messages.json',
     );
     final jsonData = json.decode(jsonStr);
-    return List<Map<String, dynamic>>.from(jsonData['conversations']);
+    setState(() {
+      _conversations = List<Map<String, dynamic>>.from(
+        jsonData['conversations'],
+      );
+      _loading = false;
+    });
+  }
+
+  void _deleteConversation(int index) {
+    final removed = _conversations[index];
+
+    setState(() {
+      _conversations.removeAt(index);
+    });
+
+    // Mostra snackbar com opção de desfazer
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Conversa com ${removed['name']} apagada'),
+        action: SnackBarAction(
+          label: 'Desfazer',
+          onPressed: () {
+            setState(() {
+              _conversations.insert(index, removed);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: _loadConversations(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return ValueListenableBuilder<String>(
+      valueListenable: widget.searchNotifier,
+      builder: (context, query, _) {
+        final filtered =
+            _conversations
+                .asMap()
+                .entries
+                .where(
+                  (entry) => (entry.value['name'] ?? '').toLowerCase().contains(
+                    query.toLowerCase(),
+                  ),
+                )
+                .toList();
+
+        if (filtered.isEmpty) {
+          return const Center(
+            child: Text(
+              'Nenhuma conversa encontrada.',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          );
         }
 
-        final allChats = snapshot.data!;
+        Widget list = ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: filtered.length,
+          itemBuilder: (context, index) {
+            final entry = filtered[index];
+            final realIndex = entry.key;
+            final chat = entry.value;
+            final imageUrl = chat['image'];
+            final messages = List<Map<String, dynamic>>.from(
+              chat['messages'] ?? [],
+            );
+            final lastMessage =
+                messages.isNotEmpty ? messages.last['text'] : '';
+            final time = messages.isNotEmpty ? messages.last['time'] ?? '' : '';
 
-        return ValueListenableBuilder<String>(
-          valueListenable: searchNotifier,
-          builder: (context, query, _) {
-            final filtered =
-                allChats.where((chat) {
-                  final name = (chat['name'] ?? '').toLowerCase();
-                  return name.contains(query.toLowerCase());
-                }).toList();
-
-            if (filtered.isEmpty) {
-              return const Center(
-                child: Text(
-                  'Nenhuma conversa encontrada.',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Dismissible(
+                key: Key(chat['name']),
+                direction: DismissDirection.endToStart,
+                onDismissed: (_) => _deleteConversation(realIndex),
+                background: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Icon(Icons.delete, color: Colors.white),
                 ),
-              );
-            }
-
-            Widget list = ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: filtered.length,
-              itemBuilder: (context, index) {
-                final chat = filtered[index];
-                final imageUrl = chat['image'];
-                final messages = List<Map<String, dynamic>>.from(
-                  chat['messages'] ?? [],
-                );
-                final lastMessage =
-                    messages.isNotEmpty ? messages.last['text'] : '';
-                final time =
-                    messages.isNotEmpty ? messages.last['time'] ?? '' : '';
-
-                return InkWell(
+                child: InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -129,7 +187,6 @@ class MessagesBody extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -193,23 +250,23 @@ class MessagesBody extends StatelessWidget {
                       ],
                     ),
                   ),
-                );
-              },
-            );
-
-            // Limita largura para web
-            if (kIsWeb) {
-              return Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 768),
-                  child: list,
                 ),
-              );
-            }
-
-            return list;
+              ),
+            );
           },
         );
+
+        // Limita largura para web
+        if (kIsWeb) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 768),
+              child: list,
+            ),
+          );
+        }
+
+        return list;
       },
     );
   }
