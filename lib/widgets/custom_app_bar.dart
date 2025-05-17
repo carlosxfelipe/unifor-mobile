@@ -52,14 +52,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           itemBuilder:
               (context) => [
                 _buildColorOption("Azul claro", const Color(0xFFE4F2FD)),
-                _buildColorOption("Branco", Colors.white),
+                // _buildColorOption("Branco", Colors.white),
                 _buildColorOption("Amarelo claro", const Color(0xFFFEEFC3)),
                 _buildColorOption("Laranja claro", const Color(0xFFFFF3E0)),
                 _buildColorOption("Vermelho claro", const Color(0xFFFFEBEE)),
                 _buildColorOption("Ciano claro", const Color(0xFFE0F7FA)),
                 _buildColorOption("Roxo claro", const Color(0xFFF3E5F5)),
                 _buildColorOption("Verde claro", const Color(0xFFE8F5E9)),
-                _buildColorOption("Cinza claro", const Color(0xFFF5F5F5)),
+                // _buildColorOption("Cinza claro", const Color(0xFFF5F5F5)),
               ],
         ),
       ],

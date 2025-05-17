@@ -77,13 +77,12 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     final scaffoldColor = Theme.of(context).scaffoldBackgroundColor;
     final isDark = isColorDark(scaffoldColor);
-    final myMessageColor = scaffoldColor;
     final myTextColor = isDark ? Colors.white : Colors.black87;
     final myTimeColor = isDark ? Colors.white70 : Colors.black54;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: scaffoldColor,
         elevation: 0,
         shadowColor: Colors.black12,
         surfaceTintColor: Colors.transparent,
@@ -112,8 +111,8 @@ class _ChatScreenState extends State<ChatScreen> {
             const SizedBox(width: 12),
             Text(
               widget.name,
-              style: const TextStyle(
-                color: Colors.black87,
+              style: TextStyle(
+                color: isDark ? Colors.white : Colors.black87,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -132,14 +131,12 @@ class _ChatScreenState extends State<ChatScreen> {
             itemBuilder:
                 (context) => [
                   _buildColorOption("Azul claro", const Color(0xFFE4F2FD)),
-                  _buildColorOption("Branco", Colors.white),
                   _buildColorOption("Amarelo claro", const Color(0xFFFEEFC3)),
                   _buildColorOption("Laranja claro", const Color(0xFFFFF3E0)),
                   _buildColorOption("Vermelho claro", const Color(0xFFFFEBEE)),
                   _buildColorOption("Ciano claro", const Color(0xFFE0F7FA)),
                   _buildColorOption("Roxo claro", const Color(0xFFF3E5F5)),
                   _buildColorOption("Verde claro", const Color(0xFFE8F5E9)),
-                  _buildColorOption("Cinza claro", const Color(0xFFF5F5F5)),
                 ],
           ),
         ],
