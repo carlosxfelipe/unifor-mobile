@@ -2,52 +2,61 @@
   "conversations": [
     {
       "name": "Alan Bandeira",
-      "time": "12:30",
       "image": "https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA",
       "messages": [
-        { "text": "Ei! Vamos conversar depois?", "isMe": false },
-        { "text": "Claro! Me chama mais tarde.", "isMe": true }
+        {
+          "text": "Ei! Vamos conversar depois? 😉",
+          "isMe": false,
+          "time": "12:30"
+        },
+        {
+          "text": "Claro! Me chama mais tarde. 😃",
+          "isMe": true,
+          "time": "12:32"
+        }
       ]
     },
     {
       "name": "Thiago Narak",
-      "time": "11:45",
       "image": "https://media.licdn.com/dms/image/v2/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o",
       "messages": [
         {
-          "text": "A impressora 3D terminou a peça! Depois te mostro.",
-          "isMe": false
+          "text": "A impressora 3D terminou a peça! Depois te mostro. 😎",
+          "isMe": false,
+          "time": "11:45"
         },
-        { "text": "Boa! Quero ver como ficou", "isMe": true }
+        {
+          "text": "Boa! Quero ver como ficou 😍😍😍",
+          "isMe": true,
+          "time": "11:46"
+        }
       ]
     },
     {
       "name": "Grupo Unifor",
-      "time": "11:15",
       "image": "https://pbs.twimg.com/profile_images/1777800502220107776/Bn7BrHTm_400x400.jpg",
       "messages": [
-        { "text": "Nova reunião marcada!", "isMe": false },
-        { "text": "Já adicionei na agenda", "isMe": true }
+        { "text": "Nova reunião marcada!", "isMe": false, "time": "11:15" },
+        { "text": "Já adicionei na agenda", "isMe": true, "time": "11:17" }
       ]
     },
     {
       "name": "Maria Jousy",
-      "time": "Ontem",
       "messages": [
-        { "text": "Tudo certo por aqui :)", "isMe": false },
-        { "text": "Ótimo! Qualquer coisa avisa", "isMe": true }
+        { "text": "Tudo certo por aqui :)", "isMe": false, "time": "Ontem" },
+        { "text": "Ótimo! Qualquer coisa avisa", "isMe": true, "time": "Ontem" }
       ]
     },
     {
       "name": "Rafaela Ponte",
-      "time": "Ontem",
       "image": "https://media.licdn.com/dms/image/v2/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ",
       "messages": [
         {
           "text": "Vai ter um evento de tecnologia sábado na Unifor. Bora?",
-          "isMe": false
+          "isMe": false,
+          "time": "Ontem"
         },
-        { "text": "Tô dentro!", "isMe": true }
+        { "text": "Tô dentro! 😉", "isMe": true, "time": "Ontem" }
       ]
     }
   ]

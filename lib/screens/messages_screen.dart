@@ -115,7 +115,8 @@ class MessagesBody extends StatelessWidget {
                 );
                 final lastMessage =
                     messages.isNotEmpty ? messages.last['text'] : '';
-                final time = chat['time'] ?? '';
+                final time =
+                    messages.isNotEmpty ? messages.last['time'] ?? '' : '';
 
                 return InkWell(
                   onTap: () {
