@@ -260,11 +260,54 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.clear();
   }
 
+  String _getUserImage(String name) {
+    final mockImages = {
+      'Alan Bandeira':
+          'https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
+      'Thiago Narak':
+          'https://media.licdn.com/dms/image/v2/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
+      'Grupo Unifor':
+          'https://pbs.twimg.com/profile_images/1777800502220107776/Bn7BrHTm_400x400.jpg',
+      'Rafaela Ponte':
+          'https://media.licdn.com/dms/image/v2/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ',
+    };
+
+    return mockImages[name] ??
+        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(name)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.name)),
-      backgroundColor: const Color(0xFFE5F0FA),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.black12,
+        surfaceTintColor: Colors.transparent,
+        automaticallyImplyLeading: true,
+        titleSpacing: 0,
+        title: Row(
+          children: [
+            const SizedBox(width: 8),
+            CircleAvatar(
+              backgroundImage: NetworkImage(_getUserImage(widget.name)),
+              radius: 22,
+              backgroundColor: Colors.grey[300],
+            ),
+            const SizedBox(width: 12),
+            Text(
+              widget.name,
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+        iconTheme: const IconThemeData(color: Colors.black87),
+      ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -306,8 +349,9 @@ class _ChatScreenState extends State<ChatScreen> {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12,
-                  blurRadius: 6,
-                  offset: Offset(0, -2),
+                  blurRadius: 0,
+                  spreadRadius: 0,
+                  offset: Offset(0, -1),
                 ),
               ],
             ),
