@@ -73,12 +73,22 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  bool _isLocalDark = false;
+
+  void _toggleLocalDarkMode() {
+    setState(() {
+      _isLocalDark = !_isLocalDark;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final scaffoldColor = Theme.of(context).scaffoldBackgroundColor;
     final isDark = isColorDark(scaffoldColor);
     final myTextColor = isDark ? Colors.white : Colors.black87;
     final myTimeColor = isDark ? Colors.white70 : Colors.black54;
+
+    final background = _isLocalDark ? const Color(0xFF121212) : Colors.white;
 
     return Scaffold(
       appBar: AppBar(
@@ -120,8 +130,21 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         actions: [
+          // Botão para alternar tema claro/escuro (sol/lua)
+          IconButton(
+            icon: Icon(
+              _isLocalDark ? Icons.wb_sunny : Icons.nightlight_round,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: _toggleLocalDarkMode,
+          ),
+
+          // Botão para escolher a cor do tema
           PopupMenuButton<Color>(
-            icon: const Icon(Icons.palette, color: Colors.black87),
+            icon: Icon(
+              Icons.palette,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             onSelected: (color) {
               Provider.of<ThemeProvider>(
                 context,
@@ -142,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
         iconTheme: const IconThemeData(color: Colors.black87),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: background,
       body: Column(
         children: [
           Expanded(
@@ -214,8 +237,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
           ),
           Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: background,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12,
