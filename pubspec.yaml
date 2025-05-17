@@ -28,3 +28,4 @@ flutter:
 
   assets:
     - assets/stories.json
+    - assets/mock_messages.json

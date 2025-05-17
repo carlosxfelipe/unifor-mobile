@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:unifor_mobile/widgets.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:unifor_mobile/widgets.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -65,172 +67,149 @@ class MessagesBody extends StatelessWidget {
 
   const MessagesBody({super.key, required this.searchNotifier});
 
+  Future<List<Map<String, dynamic>>> _loadConversations() async {
+    final String jsonStr = await rootBundle.loadString(
+      'assets/mock_messages.json',
+    );
+    final jsonData = json.decode(jsonStr);
+    return List<Map<String, dynamic>>.from(jsonData['conversations']);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final chats = [
-      {
-        'name': 'Alan Bandeira',
-        'message': 'Ei! Vamos conversar depois?',
-        'time': '12:30',
-        'image':
-            'https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
-      },
-      {
-        'name': 'Thiago Narak',
-        'message': 'A impressora 3D terminou a peça! Depois te mostro.',
-        'time': '11:45',
-        'image':
-            'https://media.licdn.com/dms/image/v2/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
-      },
-      {
-        'name': 'Grupo Unifor',
-        'message': 'Nova reunião marcada!',
-        'time': '11:15',
-        'image':
-            'https://pbs.twimg.com/profile_images/1777800502220107776/Bn7BrHTm_400x400.jpg',
-      },
-      {
-        'name': 'Maria Jousy',
-        'message': 'Tudo certo por aqui :)',
-        'time': 'Ontem',
-      },
-      {
-        'name': 'Rafaela Ponte',
-        'message': 'Vai ter um evento de tecnologia sábado na Unifor. Bora?',
-        'time': 'Ontem',
-        'image':
-            'https://media.licdn.com/dms/image/v2/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ',
-      },
-    ];
-
-    Widget content = ValueListenableBuilder<String>(
-      valueListenable: searchNotifier,
-      builder: (context, query, _) {
-        final filtered =
-            chats.where((chat) {
-              final name = chat['name']!.toLowerCase();
-              return name.contains(query.toLowerCase());
-            }).toList();
-
-        if (filtered.isEmpty) {
-          return const Center(
-            child: Text(
-              'Nenhuma conversa encontrada.',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          );
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _loadConversations(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
         }
 
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: filtered.length,
-          itemBuilder: (context, index) {
-            final chat = filtered[index];
-            final imageUrl = chat['image'];
+        final allChats = snapshot.data!;
 
-            return InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ChatScreen(name: chat['name']!),
+        return ValueListenableBuilder<String>(
+          valueListenable: searchNotifier,
+          builder: (context, query, _) {
+            final filtered =
+                allChats.where((chat) {
+                  final name = (chat['name'] ?? '').toLowerCase();
+                  return name.contains(query.toLowerCase());
+                }).toList();
+
+            if (filtered.isEmpty) {
+              return const Center(
+                child: Text(
+                  'Nenhuma conversa encontrada.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              );
+            }
+
+            Widget list = ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: filtered.length,
+              itemBuilder: (context, index) {
+                final chat = filtered[index];
+                final imageUrl = chat['image'];
+                final messages = List<Map<String, dynamic>>.from(
+                  chat['messages'] ?? [],
+                );
+                final lastMessage =
+                    messages.isNotEmpty ? messages.last['text'] : '';
+                final time = chat['time'] ?? '';
+
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ChatScreen(name: chat['name']),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 28,
+                          backgroundColor: Colors.blueAccent,
+                          backgroundImage:
+                              imageUrl != null ? NetworkImage(imageUrl) : null,
+                          child:
+                              imageUrl == null
+                                  ? Text(
+                                    chat['name'][0],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                    ),
+                                  )
+                                  : null,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                chat['name'],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                lastMessage,
+                                style: const TextStyle(color: Colors.black87),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          time,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: Colors.blueAccent,
-                      child:
-                          (imageUrl != null && imageUrl.isNotEmpty)
-                              ? ClipOval(
-                                child: Image.network(
-                                  imageUrl,
-                                  width: 56,
-                                  height: 56,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Center(
-                                      child: Text(
-                                        chat['name']![0],
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 24,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                              : Text(
-                                chat['name']![0],
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                ),
-                              ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            chat['name']!,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            chat['message']!,
-                            style: const TextStyle(color: Colors.black87),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      chat['time']!,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
             );
+
+            // Limita largura para web
+            if (kIsWeb) {
+              return Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 768),
+                  child: list,
+                ),
+              );
+            }
+
+            return list;
           },
         );
       },
     );
-
-    // Limita largura apenas na web
-    if (kIsWeb) {
-      content = Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 768),
-          child: content,
-        ),
-      );
-    }
-
-    return content;
   }
 }
 
@@ -245,10 +224,34 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
-  final List<Map<String, dynamic>> _messages = [
-    {'text': 'Olá! Tudo bem?', 'isMe': false},
-    {'text': 'Sim! E você?', 'isMe': true},
-  ];
+  List<Map<String, dynamic>> _messages = [];
+  String? _imageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  Future<void> _loadMessages() async {
+    final String jsonStr = await rootBundle.loadString(
+      'assets/mock_messages.json',
+    );
+    final jsonData = json.decode(jsonStr);
+    final conversations = List<Map<String, dynamic>>.from(
+      jsonData['conversations'],
+    );
+
+    final userChat = conversations.firstWhere(
+      (chat) => chat['name'] == widget.name,
+      orElse: () => {},
+    );
+
+    setState(() {
+      _messages = List<Map<String, dynamic>>.from(userChat['messages'] ?? []);
+      _imageUrl = userChat['image'];
+    });
+  }
 
   void _sendMessage() {
     final text = _messageController.text.trim();
@@ -258,22 +261,6 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.add({'text': text, 'isMe': true});
     });
     _messageController.clear();
-  }
-
-  String _getUserImage(String name) {
-    final mockImages = {
-      'Alan Bandeira':
-          'https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA',
-      'Thiago Narak':
-          'https://media.licdn.com/dms/image/v2/D4D03AQF-kEAeiNxN3Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1665756606748?e=2147483647&v=beta&t=sVk9fFvw59JCdqFq8yIIhL0oQbg7RHcJywvdSHR9w0o',
-      'Grupo Unifor':
-          'https://pbs.twimg.com/profile_images/1777800502220107776/Bn7BrHTm_400x400.jpg',
-      'Rafaela Ponte':
-          'https://media.licdn.com/dms/image/v2/C5603AQEejEvPT8DGYw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1575916280776?e=2147483647&v=beta&t=s3RTioyI5vexvXyi5julCggEdJtmlt_ivRn5oN8eFuQ',
-    };
-
-    return mockImages[name] ??
-        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(name)}';
   }
 
   @override
@@ -290,9 +277,21 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             const SizedBox(width: 8),
             CircleAvatar(
-              backgroundImage: NetworkImage(_getUserImage(widget.name)),
               radius: 22,
               backgroundColor: Colors.grey[300],
+              backgroundImage:
+                  _imageUrl != null ? NetworkImage(_imageUrl!) : null,
+              child:
+                  _imageUrl == null
+                      ? Text(
+                        widget.name[0],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      )
+                      : null,
             ),
             const SizedBox(width: 12),
             Text(
@@ -311,37 +310,50 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final msg = _messages[index];
-                final alignment =
-                    msg['isMe'] ? Alignment.centerRight : Alignment.centerLeft;
-                final bgColor =
-                    msg['isMe'] ? const Color(0xFF007AFF) : Colors.grey[300];
-                final textColor = msg['isMe'] ? Colors.white : Colors.black87;
+            child:
+                _messages.isEmpty
+                    ? const Center(
+                      child: Text(
+                        'Nenhuma mensagem ainda.',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        final msg = _messages[index];
+                        final alignment =
+                            msg['isMe'] == true
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft;
+                        final bgColor =
+                            msg['isMe'] == true
+                                ? const Color(0xFF007AFF)
+                                : Colors.grey[300];
+                        final textColor =
+                            msg['isMe'] == true ? Colors.white : Colors.black87;
 
-                return Align(
-                  alignment: alignment,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
+                        return Align(
+                          alignment: alignment,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: bgColor,
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: Text(
+                              msg['text'],
+                              style: TextStyle(color: textColor),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    decoration: BoxDecoration(
-                      color: bgColor,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      msg['text'],
-                      style: TextStyle(color: textColor),
-                    ),
-                  ),
-                );
-              },
-            ),
           ),
           Container(
             decoration: const BoxDecoration(
