@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
 import 'package:unifor_mobile/theme/theme_provider.dart';
 
 bool isColorDark(Color color) {
@@ -89,6 +91,57 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _isLocalDark = !_isLocalDark;
     });
+  }
+
+  List<TextSpan> _buildMessageTextSpans(String text, Color color) {
+    final RegExp linkRegExp = RegExp(
+      r'(https?:\/\/[^\s]+)',
+      caseSensitive: false,
+    );
+
+    final List<TextSpan> spans = [];
+    int start = 0;
+
+    linkRegExp.allMatches(text).forEach((match) {
+      if (match.start > start) {
+        spans.add(
+          TextSpan(
+            text: text.substring(start, match.start),
+            style: TextStyle(color: color),
+          ),
+        );
+      }
+
+      final url = match.group(0)!;
+
+      spans.add(
+        TextSpan(
+          text: url,
+          style: TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+          recognizer:
+              TapGestureRecognizer()
+                ..onTap = () async {
+                  final uri = Uri.parse(url);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  }
+                },
+        ),
+      );
+
+      start = match.end;
+    });
+
+    if (start < text.length) {
+      spans.add(
+        TextSpan(text: text.substring(start), style: TextStyle(color: color)),
+      );
+    }
+
+    return spans;
   }
 
   @override
@@ -230,12 +283,25 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ? CrossAxisAlignment.end
                                       : CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  msg['text'],
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
+                                // Text(
+                                //   msg['text'],
+                                //   style: TextStyle(
+                                //     color: textColor,
+                                //     fontSize: 16,
+                                //     fontWeight: FontWeight.w500,
+                                //   ),
+                                // ),
+                                RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      color: textColor,
+                                    ),
+                                    children: _buildMessageTextSpans(
+                                      msg['text'],
+                                      textColor,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 4),

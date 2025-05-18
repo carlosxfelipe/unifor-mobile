@@ -81,7 +81,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.rocket_launch, size: 28),
-                label: 'Torpedo',
+                label: 'Torpedos',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.menu_book, size: 28),

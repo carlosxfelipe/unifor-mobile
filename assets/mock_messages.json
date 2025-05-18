@@ -5,17 +5,22 @@
       "image": "https://pbs.twimg.com/profile_images/1777800502220107776/Bn7BrHTm_400x400.jpg",
       "messages": [
         {
-          "text": "Bom dia! Já posso analisar os dados daquele relatório. Me envia quando puder. 📊",
-          "isMe": false,
+          "text": "Oi, Moema! Você sabe onde fica a coordenação do curso de ADS na Unifor?",
+          "isMe": true,
           "time": "08:12"
         },
         {
-          "text": "Bom dia, Moema! Já te enviei por e-mail. 😉",
+          "text": "Oi! Sim, a coordenação do curso de Análise e Desenvolvimento de Sistemas (ADS) fica no bloco J, no térreo. É só entrar pelo acesso principal e seguir as placas de orientação. Se precisar, posso te mandar um mapinha. 😉",
+          "isMe": false,
+          "time": "08:13"
+        },
+        {
+          "text": "Nossa, seria ótimo! Manda sim.",
           "isMe": true,
           "time": "08:14"
         },
         {
-          "text": "Recebido! Assim que concluir a análise, te aviso. 🚀",
+          "text": "Aqui está o link do mapa do campus: https://unifor.br/documents/d/guest/mapa_unifor25 . Qualquer dúvida, me chama! 📍",
           "isMe": false,
           "time": "08:15"
         }
