@@ -90,6 +90,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
     final background = _isLocalDark ? const Color(0xFF121212) : Colors.white;
 
+    final hasImage = _imageUrl != null && _imageUrl!.isNotEmpty;
+    final avatarColor = Colors.blueAccent;
+    final avatarInitial =
+        widget.name.isNotEmpty ? widget.name[0].toUpperCase() : '?';
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: scaffoldColor,
@@ -100,16 +105,14 @@ class _ChatScreenState extends State<ChatScreen> {
         titleSpacing: 0,
         title: Row(
           children: [
-            const SizedBox(width: 8),
             CircleAvatar(
               radius: 22,
-              backgroundColor: Colors.grey[300],
-              backgroundImage:
-                  _imageUrl != null ? NetworkImage(_imageUrl!) : null,
+              backgroundColor: avatarColor,
+              backgroundImage: hasImage ? NetworkImage(_imageUrl!) : null,
               child:
-                  _imageUrl == null
+                  !hasImage
                       ? Text(
-                        widget.name[0],
+                        avatarInitial,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -119,12 +122,16 @@ class _ChatScreenState extends State<ChatScreen> {
                       : null,
             ),
             const SizedBox(width: 12),
-            Text(
-              widget.name,
-              style: TextStyle(
-                color: isDark ? Colors.white : Colors.black87,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+            Expanded(
+              child: Text(
+                widget.name,
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black87,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
           ],
