@@ -54,10 +54,18 @@ class _ChatScreenState extends State<ChatScreen> {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
+    // setState(() {
+    //   _messages.add({'text': text, 'isMe': true});
+    // });
+    // _messageController.clear();
+
+    final now = TimeOfDay.now();
+    final formattedTime =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
     setState(() {
-      _messages.add({'text': text, 'isMe': true});
+      _messages.add({'text': text, 'isMe': true, 'time': formattedTime});
     });
-    _messageController.clear();
   }
 
   PopupMenuItem<Color> _buildColorOption(String name, Color color) {
