@@ -256,15 +256,19 @@ class _ChatScreenState extends State<ChatScreen> {
                             msg['isMe'] == true
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft;
+                        final isMe = msg['isMe'] == true;
                         final bgColor =
-                            msg['isMe'] == true
+                            isMe
                                 ? Theme.of(context).scaffoldBackgroundColor
                                 : (_isLocalDark
-                                    ? Colors.white
+                                    ? const Color(0xFF2C2C2C)
                                     : Colors.grey[100]);
                         final textColor =
-                            msg['isMe'] == true ? myTextColor : Colors.black87;
-
+                            isMe
+                                ? myTextColor
+                                : (_isLocalDark
+                                    ? Colors.white
+                                    : Colors.black87);
                         return Align(
                           alignment: alignment,
                           child: Container(
@@ -348,7 +352,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF2F2F7),
+                          color:
+                              _isLocalDark
+                                  ? const Color(0xFF2C2C2C)
+                                  : const Color(0xFFF2F2F7),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: TextField(
@@ -363,12 +370,20 @@ class _ChatScreenState extends State<ChatScreen> {
                             // Web/Desktop: Enter = enviar
                             _sendMessage();
                           },
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Digite uma mensagem...',
-                            hintStyle: TextStyle(color: Colors.black54),
+                            hintStyle: TextStyle(
+                              color:
+                                  _isLocalDark
+                                      ? Colors.white70
+                                      : Colors.black54,
+                            ),
                             border: InputBorder.none,
                           ),
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: _isLocalDark ? Colors.white : Colors.black87,
+                          ),
                         ),
                       ),
                     ),
