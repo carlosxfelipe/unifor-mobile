@@ -73,6 +73,8 @@ class StoryCircleList extends StatelessWidget {
                                           duration: Duration(
                                             seconds: story['duration'] ?? 5,
                                           ),
+                                          userName: person['name'],
+                                          userImage: person['image'],
                                         ),
                                   ),
                                 );

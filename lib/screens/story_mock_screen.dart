@@ -6,12 +6,16 @@ class StoryMockScreen extends StatefulWidget {
   final String description;
   final List<String> colors;
   final Duration duration;
+  final String userName;
+  final String? userImage;
 
   const StoryMockScreen({
     required this.title,
     required this.description,
     required this.colors,
     required this.duration,
+    required this.userName,
+    required this.userImage,
     super.key,
   });
 
@@ -111,28 +115,78 @@ class _StoryMockScreenState extends State<StoryMockScreen>
             right: 0,
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    return LinearProgressIndicator(
-                      value: _controller.value,
-                      backgroundColor: Colors.white24,
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        Colors.white,
-                      ),
-                    );
-                  },
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14.0,
+                  vertical: 8.0,
+                ),
+                child: Column(
+                  children: [
+                    // Progress bar
+                    AnimatedBuilder(
+                      animation: _controller,
+                      builder: (context, child) {
+                        return LinearProgressIndicator(
+                          value: _controller.value,
+                          backgroundColor: Colors.white24,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    // Top row with avatar, name and close button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 16,
+                                backgroundImage:
+                                    widget.userImage != null
+                                        ? NetworkImage(widget.userImage!)
+                                        : null,
+                                child:
+                                    widget.userImage == null
+                                        ? const Icon(
+                                          Icons.account_circle,
+                                          size: 16,
+                                          color: Colors.white,
+                                        )
+                                        : null,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              widget.userName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(0, 1),
+                                    blurRadius: 2,
+                                    color: Colors.black54,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            top: 80,
-            right: 14,
-            child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
             ),
           ),
         ],
