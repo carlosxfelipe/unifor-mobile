@@ -218,9 +218,11 @@ class _MessagesBodyState extends State<MessagesBody> {
                           radius: 28,
                           backgroundColor: Colors.blueAccent,
                           backgroundImage:
-                              imageUrl != null ? NetworkImage(imageUrl) : null,
+                              (imageUrl != null && imageUrl.isNotEmpty)
+                                  ? NetworkImage(imageUrl)
+                                  : null,
                           child:
-                              imageUrl == null
+                              (imageUrl == null || imageUrl.isEmpty)
                                   ? Text(
                                     chat['name'][0],
                                     style: const TextStyle(
