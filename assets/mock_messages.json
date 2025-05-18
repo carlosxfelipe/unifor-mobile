@@ -84,6 +84,22 @@
         },
         { "text": "Tô dentro! 😉", "isMe": true, "time": "Ontem" }
       ]
+    },
+    {
+      "name": "Rommel Dias",
+      "image": "https://media.licdn.com/dms/image/v2/C5603AQE5bGvQMzUDnw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1649780876795?e=1753315200&v=beta&t=q3FAfdC7nz9i_DuPrdjihwVsrxSPLXaC3LzzWa0hf3c",
+      "messages": [
+        {
+          "text": "E aí, como estão as coisas?",
+          "isMe": false,
+          "time": "Ontem"
+        },
+        {
+          "text": "Tudo certo por aqui, e contigo?",
+          "isMe": true,
+          "time": "Ontem"
+        }
+      ]
     }
   ]
 }
