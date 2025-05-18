@@ -66,6 +66,8 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _messages.add({'text': text, 'isMe': true, 'time': formattedTime});
     });
+
+    _messageController.clear();
   }
 
   PopupMenuItem<Color> _buildColorOption(String name, Color color) {
@@ -285,6 +287,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         child: TextField(
                           controller: _messageController,
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.send,
+                          maxLines: 1,
+                          minLines: 1,
+                          onSubmitted:
+                              (_) => _sendMessage(), // Mobile: Enter = enviar
+                          onEditingComplete: () {
+                            // Web/Desktop: Enter = enviar
+                            _sendMessage();
+                          },
                           decoration: const InputDecoration(
                             hintText: 'Digite uma mensagem...',
                             hintStyle: TextStyle(color: Colors.black54),
