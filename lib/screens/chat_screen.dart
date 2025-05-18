@@ -134,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(
               _isLocalDark ? Icons.wb_sunny : Icons.nightlight_round,
-              color: Theme.of(context).colorScheme.primary,
+              // color: Theme.of(context).colorScheme.primary,
             ),
             onPressed: _toggleLocalDarkMode,
           ),
@@ -143,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
           PopupMenuButton<Color>(
             icon: Icon(
               Icons.palette,
-              color: Theme.of(context).colorScheme.primary,
+              // color: Theme.of(context).colorScheme.primary,
             ),
             onSelected: (color) {
               Provider.of<ThemeProvider>(

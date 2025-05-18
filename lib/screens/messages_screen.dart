@@ -49,20 +49,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 }
 
-// class MessagesBody extends StatelessWidget {
-//   const MessagesBody({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(
-//       child: Text(
-//         'Nenhuma mensagem ainda.',
-//         style: TextStyle(fontSize: 16, color: Colors.grey),
-//       ),
-//     );
-//   }
-// }
-
 class MessagesBody extends StatefulWidget {
   final ValueNotifier<String> searchNotifier;
 
@@ -102,7 +88,6 @@ class _MessagesBodyState extends State<MessagesBody> {
       _conversations.removeAt(index);
     });
 
-    // Mostra snackbar com opção de desfazer
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
