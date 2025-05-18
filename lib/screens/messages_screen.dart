@@ -62,6 +62,8 @@ class _MessagesBodyState extends State<MessagesBody> {
   List<Map<String, dynamic>> _conversations = [];
   bool _loading = true;
 
+  final Map<String, bool> _isDraggingMap = {};
+
   @override
   void initState() {
     super.initState();
@@ -155,13 +157,24 @@ class _MessagesBodyState extends State<MessagesBody> {
             final lastMessage =
                 messages.isNotEmpty ? messages.last['text'] : '';
             final time = messages.isNotEmpty ? messages.last['time'] ?? '' : '';
+            final chatKey = chat['name'];
+
+            final isDragging = _isDraggingMap[chatKey] ?? false;
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Dismissible(
-                key: Key(chat['name']),
+                key: Key(chatKey),
                 direction: DismissDirection.endToStart,
                 onDismissed: (_) => _deleteConversation(realIndex),
+                onUpdate: (details) {
+                  final dragging = details.progress > 0;
+                  if ((_isDraggingMap[chatKey] ?? false) != dragging) {
+                    setState(() {
+                      _isDraggingMap[chatKey] = dragging;
+                    });
+                  }
+                },
                 background: Container(
                   decoration: BoxDecoration(
                     color: Colors.redAccent,
@@ -184,7 +197,13 @@ class _MessagesBodyState extends State<MessagesBody> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius:
+                          isDragging
+                              ? const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                bottomLeft: Radius.circular(12),
+                              )
+                              : BorderRadius.circular(12),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
