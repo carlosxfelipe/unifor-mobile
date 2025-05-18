@@ -141,23 +141,36 @@ class _StoryMockScreenState extends State<StoryMockScreen>
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white,
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
                               child: CircleAvatar(
-                                radius: 16,
-                                backgroundImage:
-                                    widget.userImage != null
-                                        ? NetworkImage(widget.userImage!)
-                                        : null,
-                                child:
-                                    widget.userImage == null
-                                        ? const Icon(
-                                          Icons.account_circle,
-                                          size: 16,
-                                          color: Colors.white,
-                                        )
-                                        : null,
+                                radius: 18,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor: const Color(0xFFB0B0B0),
+                                  backgroundImage:
+                                      widget.userImage != null
+                                          ? NetworkImage(widget.userImage!)
+                                          : null,
+                                  child:
+                                      widget.userImage == null
+                                          ? const Icon(
+                                            Icons.account_circle,
+                                            size: 16,
+                                            color: Colors.white,
+                                          )
+                                          : null,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 8),
