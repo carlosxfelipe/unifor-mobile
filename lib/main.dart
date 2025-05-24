@@ -17,10 +17,6 @@ Future<void> main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
-  debugPrint('✅ ENV LOADED');
-  debugPrint('URL: ${dotenv.env['SUPABASE_URL']}');
-  debugPrint('KEY: ${dotenv.env['SUPABASE_ANON_KEY']?.substring(0, 10)}...');
-
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
