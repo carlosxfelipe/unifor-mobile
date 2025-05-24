@@ -33,3 +33,4 @@ flutter:
     - assets/stories.json
     - assets/mock_messages.json
     - .env
+    - assets/images/terezinha.png

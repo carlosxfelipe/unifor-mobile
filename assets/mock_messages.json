@@ -27,6 +27,17 @@
       ]
     },
     {
+      "name": "Terezinha IA",
+      "image": "local:assets/images/terezinha.png",
+      "messages": [
+        {
+          "text": "Olá! Sou a Terezinha IA, sua assistente de apoio emocional. Como posso te ajudar hoje?",
+          "isMe": false,
+          "time": "00:00"
+        }
+      ]
+    },
+    {
       "name": "Alan Bandeira",
       "image": "https://media.licdn.com/dms/image/v2/C4E03AQFEpO5-pbHssw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1558734738354?e=1752105600&v=beta&t=3BaipvlXXkgEVxYbzAjwjKxWqBVqm-7B_pXklbocqwA",
       "messages": [

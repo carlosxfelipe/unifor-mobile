@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
+import 'package:http/http.dart' as http;
 import 'package:unifor_mobile/theme/theme_provider.dart';
 
 bool isColorDark(Color color) {
@@ -52,14 +53,58 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  Future<void> _sendToPsychologistAPI(String userMessage) async {
+    final url = Uri.parse(
+      'https://gemini-chat-7d5w.onrender.com/gemini/chat/psychologist',
+    );
+
+    final body = {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {"text": userMessage},
+          ],
+        },
+      ],
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final reply =
+            jsonResponse['candidates']?[0]?['content']?['parts']?[0]?['text'];
+
+        if (reply != null) {
+          final now = TimeOfDay.now();
+          final formattedTime =
+              '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+          setState(() {
+            _messages.add({
+              'text': reply,
+              'isMe': false,
+              'time': formattedTime,
+            });
+          });
+        }
+      } else {
+        debugPrint('Erro na resposta da API: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Erro ao enviar mensagem para a API da Terezinha IA: $e');
+    }
+  }
+
   void _sendMessage() {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
-
-    // setState(() {
-    //   _messages.add({'text': text, 'isMe': true});
-    // });
-    // _messageController.clear();
 
     final now = TimeOfDay.now();
     final formattedTime =
@@ -68,6 +113,11 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _messages.add({'text': text, 'isMe': true, 'time': formattedTime});
     });
+
+    // Se o chat atual é com a Terezinha IA, envia para a API
+    if (widget.name.toLowerCase() == 'terezinha ia') {
+      _sendToPsychologistAPI(text);
+    }
 
     _messageController.clear();
   }
@@ -170,7 +220,14 @@ class _ChatScreenState extends State<ChatScreen> {
             CircleAvatar(
               radius: 22,
               backgroundColor: avatarColor,
-              backgroundImage: hasImage ? NetworkImage(_imageUrl!) : null,
+              // backgroundImage: hasImage ? NetworkImage(_imageUrl!) : null,
+              backgroundImage:
+                  hasImage
+                      ? (_imageUrl!.startsWith("local:")
+                          ? AssetImage(_imageUrl!.replaceFirst("local:", ""))
+                              as ImageProvider
+                          : NetworkImage(_imageUrl!))
+                      : null,
               child:
                   !hasImage
                       ? Text(
@@ -286,14 +343,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ? CrossAxisAlignment.end
                                       : CrossAxisAlignment.start,
                               children: [
-                                // Text(
-                                //   msg['text'],
-                                //   style: TextStyle(
-                                //     color: textColor,
-                                //     fontSize: 16,
-                                //     fontWeight: FontWeight.w500,
-                                //   ),
-                                // ),
                                 RichText(
                                   text: TextSpan(
                                     style: TextStyle(

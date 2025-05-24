@@ -219,12 +219,17 @@ class _MessagesBodyState extends State<MessagesBody> {
                           backgroundColor: Colors.blueAccent,
                           backgroundImage:
                               (imageUrl != null && imageUrl.isNotEmpty)
-                                  ? NetworkImage(imageUrl)
+                                  ? (imageUrl.startsWith('local:')
+                                      ? AssetImage(
+                                            imageUrl.replaceFirst('local:', ''),
+                                          )
+                                          as ImageProvider
+                                      : NetworkImage(imageUrl))
                                   : null,
                           child:
                               (imageUrl == null || imageUrl.isEmpty)
                                   ? Text(
-                                    chat['name'][0],
+                                    chat['name'][0].toUpperCase(),
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
