@@ -32,3 +32,4 @@ flutter:
     - assets/people.json
     - assets/stories.json
     - assets/mock_messages.json
+    - .env
