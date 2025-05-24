@@ -58,7 +58,7 @@ class LatestNoticesSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          ...notices.map((notice) => _buildNoticeCard(notice)).toList(),
+          ...notices.map((notice) => _buildNoticeCard(notice)),
         ],
       ),
     );

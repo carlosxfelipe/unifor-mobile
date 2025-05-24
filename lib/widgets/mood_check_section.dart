@@ -1,8 +1,7 @@
-import 'dart:convert';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:confetti/confetti.dart';
-import 'package:http/http.dart' as http;
 
 class MoodCheckSection extends StatefulWidget {
   const MoodCheckSection({super.key});
@@ -18,22 +17,20 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
   late ConfettiController _confettiController;
 
   Future<void> _sendMoodToApi(String moodLabel) async {
-    final url = Uri.parse('https://academia-unifor-fastapi.onrender.com/mood/');
+    final supabase = Supabase.instance.client;
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'mood': moodLabel}),
-      );
+      final response =
+          await supabase.from('mood_log').insert({'mood': moodLabel}).select();
 
-      if (response.statusCode != 200) {
-        debugPrint('❌ Erro ao registrar humor: ${response.body}');
-      } else {
-        debugPrint('✅ Humor registrado: $moodLabel');
-      }
+      debugPrint('✅ Inserido com sucesso: $response');
     } catch (e) {
-      debugPrint('⚠️ Falha ao enviar humor: $e');
+      debugPrint('❌ Erro ao registrar humor no Supabase: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erro ao registrar: $e')));
+      }
     }
   }
 
