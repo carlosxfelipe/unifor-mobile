@@ -58,22 +58,36 @@ class _ChatScreenState extends State<ChatScreen> {
       'https://gemini-chat-7d5w.onrender.com/gemini/chat/psychologist',
     );
 
-    final body = {
-      "contents": [
-        {
-          "role": "user",
+    // Seleciona as últimas 6 mensagens do histórico
+    final recentMessages =
+        _messages.length > 6
+            ? _messages.sublist(_messages.length - 6)
+            : _messages;
+
+    final contents = [
+      // histórico formatado
+      ...recentMessages.map(
+        (msg) => {
+          "role": msg['isMe'] == true ? "user" : "model",
           "parts": [
-            {"text": userMessage},
+            {"text": msg['text']},
           ],
         },
-      ],
-    };
+      ),
+      // nova mensagem do usuário
+      {
+        "role": "user",
+        "parts": [
+          {"text": userMessage},
+        ],
+      },
+    ];
 
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(body),
+        body: json.encode({"contents": contents}),
       );
 
       if (response.statusCode == 200) {
