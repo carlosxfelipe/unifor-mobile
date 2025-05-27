@@ -63,7 +63,9 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
     // Espera exatamente o tempo do confetti antes de mudar o card
     await Future.delayed(_confettiController.duration);
 
-    if (label == 'horrível') {
+    const negativeLabels = ['horrível', 'mal'];
+
+    if (negativeLabels.contains(label)) {
       setState(() => _stage = 'pap');
     } else {
       setState(() => _stage = 'hidden');

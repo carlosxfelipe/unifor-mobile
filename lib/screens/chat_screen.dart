@@ -53,73 +53,12 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  Future<void> _sendToPsychologistAPI(String userMessage) async {
-    final url = Uri.parse(
-      'https://gemini-chat-7d5w.onrender.com/gemini/chat/psychologist',
-    );
-
-    // Seleciona as últimas 6 mensagens do histórico
-    final recentMessages =
-        _messages.length > 6
-            ? _messages.sublist(_messages.length - 6)
-            : _messages;
-
-    final contents = [
-      // histórico formatado
-      ...recentMessages.map(
-        (msg) => {
-          "role": msg['isMe'] == true ? "user" : "model",
-          "parts": [
-            {"text": msg['text']},
-          ],
-        },
-      ),
-      // nova mensagem do usuário
-      {
-        "role": "user",
-        "parts": [
-          {"text": userMessage},
-        ],
-      },
-    ];
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({"contents": contents}),
-      );
-
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-        final reply =
-            jsonResponse['candidates']?[0]?['content']?['parts']?[0]?['text'];
-
-        if (reply != null) {
-          final now = TimeOfDay.now();
-          final formattedTime =
-              '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-
-          setState(() {
-            _messages.add({
-              'text': reply,
-              'isMe': false,
-              'time': formattedTime,
-            });
-          });
-        }
-      } else {
-        debugPrint('Erro na resposta da API: ${response.statusCode}');
-      }
-    } catch (e) {
-      debugPrint('Erro ao enviar mensagem para a API da Terezinha IA: $e');
-    }
-  }
-
-  Future<void> _sendToMoemaAPI(String userMessage) async {
-    final url = Uri.parse(
-      'https://gemini-chat-7d5w.onrender.com/gemini/chat/moema',
-    );
+  Future<void> _sendMessageToAPI(
+    String userMessage,
+    String endpointUrl,
+    String errorLabel,
+  ) async {
+    final url = Uri.parse(endpointUrl);
 
     final recentMessages =
         _messages.length > 6
@@ -169,10 +108,12 @@ class _ChatScreenState extends State<ChatScreen> {
           });
         }
       } else {
-        debugPrint('Erro na resposta da API da Moema: ${response.statusCode}');
+        debugPrint(
+          'Erro na resposta da API ($errorLabel): ${response.statusCode}',
+        );
       }
     } catch (e) {
-      debugPrint('Erro ao enviar mensagem para a Moema IA: $e');
+      debugPrint('Erro ao enviar mensagem para a API ($errorLabel): $e');
     }
   }
 
@@ -191,9 +132,17 @@ class _ChatScreenState extends State<ChatScreen> {
     final name = widget.name.toLowerCase();
 
     if (name == 'terezinha ia') {
-      _sendToPsychologistAPI(text);
+      _sendMessageToAPI(
+        text,
+        'https://gemini-chat-7d5w.onrender.com/gemini/chat/psychologist',
+        'Terezinha IA',
+      );
     } else if (name == 'moema ia') {
-      _sendToMoemaAPI(text);
+      _sendMessageToAPI(
+        text,
+        'https://gemini-chat-7d5w.onrender.com/gemini/chat/moema',
+        'Moema IA',
+      );
     }
 
     _messageController.clear();
