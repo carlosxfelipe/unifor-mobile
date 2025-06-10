@@ -16,23 +16,23 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
 
   late ConfettiController _confettiController;
 
-  Future<void> _sendMoodToApi(String moodLabel) async {
-    final supabase = Supabase.instance.client;
+  // Future<void> _sendMoodToApi(String moodLabel) async {
+  //   final supabase = Supabase.instance.client;
 
-    try {
-      final response =
-          await supabase.from('mood_log').insert({'mood': moodLabel}).select();
+  //   try {
+  //     final response =
+  //         await supabase.from('mood_log').insert({'mood': moodLabel}).select();
 
-      debugPrint('✅ Inserido com sucesso: $response');
-    } catch (e) {
-      debugPrint('❌ Erro ao registrar humor no Supabase: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Erro ao registrar: $e')));
-      }
-    }
-  }
+  //     debugPrint('✅ Inserido com sucesso: $response');
+  //   } catch (e) {
+  //     debugPrint('❌ Erro ao registrar humor no Supabase: $e');
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(
+  //         context,
+  //       ).showSnackBar(SnackBar(content: Text('Erro ao registrar: $e')));
+  //     }
+  //   }
+  // }
 
   @override
   void initState() {
@@ -49,7 +49,8 @@ class _MoodCheckSectionState extends State<MoodCheckSection> {
   }
 
   void _onMoodSelected(String label, String response) async {
-    await _sendMoodToApi(label);
+    // API descontinuada - envio de humor desativado
+    // await _sendMoodToApi(label);
 
     setState(() {
       _stage = 'response';
